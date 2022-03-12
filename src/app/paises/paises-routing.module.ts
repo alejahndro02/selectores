@@ -1,7 +1,7 @@
 import { NgModule               } from '@angular/core';
 import { RouterModule, 
          Routes                 } from '@angular/router';
-import { SelectorPagesComponent } from './pages/selector-pages/selector-pages.component';
+import { SelectorComponent      } from './pages/selector/selector.component';
 
 const routes: Routes = [
   {
@@ -9,7 +9,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: SelectorPagesComponent
+        component: SelectorComponent
       },
       {
         path:'**',
