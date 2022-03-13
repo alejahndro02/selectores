@@ -14,7 +14,8 @@ import { PaisesServiceService } from '../../service/paises-service.service';
 export class SelectorComponent implements OnInit {
 
   miformulario: FormGroup = this.fb.group({
-    region:['', Validators.required]
+    region:['', Validators.required],
+    pais  :['', Validators.required]
   })
 // llenar los selectores
   regiones:string[] = []
@@ -32,6 +33,7 @@ export class SelectorComponent implements OnInit {
           console.log(region);
           this.paisesService.getPaisesPorRegion(region)
               .subscribe(paises => {
+                console.log(paises);
                 this.paises = paises
               })
         }
