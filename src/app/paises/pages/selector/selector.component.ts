@@ -3,6 +3,7 @@ import { Component,
 import { FormBuilder, 
          FormGroup, 
          Validators           } from '@angular/forms';
+import { switchMap, tap } from 'rxjs';
 import { PaisesSmall          } from '../../interface/paises';
 import { PaisesServiceService } from '../../service/paises-service.service';
 
@@ -28,7 +29,8 @@ export class SelectorComponent implements OnInit {
     this.regiones = this.paisesService.regiones
 
     // Cuando cambie la reion 
-    this.miformulario.get('region')?.valueChanges
+    // Este codio es rempalzado con los operadores rxjs
+    /*this.miformulario.get('region')?.valueChanges
         .subscribe(region => {
           console.log(region);
           this.paisesService.getPaisesPorRegion(region)
@@ -37,7 +39,19 @@ export class SelectorComponent implements OnInit {
                 this.paises = paises
               })
         }
-      )
+      )*/
+    this.miformulario.get('region')?.valueChanges
+        .pipe(
+          //Con (_) es una nomenctura para indicar que no me interesa lo que viene por ese valor  
+          tap( (_) => {
+            this.miformulario.get('pais')?.reset('');
+          }),
+          switchMap(region => this.paisesService.getPaisesPorRegion(region) )
+        )
+        .subscribe(paises => {
+          console.log(paises);
+          this.paises = paises
+        })
   }
 
   guardar(){
