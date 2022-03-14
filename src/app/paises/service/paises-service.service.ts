@@ -27,8 +27,12 @@ export class PaisesServiceService {
     const url = `${this._urlDb}/region/${region}?fields=cca3,name`
     return this.http.get<PaisesSmall[]>( url)
   }
-  getPaisPorCodigo(codigo:string):Observable<Pais>{
-
+  getPaisPorCodigo(codigo:string):Observable<Pais| null> {
+    //Forma de Validacion si viene un string vacio en la respuesta 
+    if(!codigo){
+      // con of() se retorna un obsevable que tiene como resultado un null
+      return of (null)
+    }
     const url = `${this._urlDb}/alpha/${codigo}`;
     return this.http.get<Pais>(url);
   }
