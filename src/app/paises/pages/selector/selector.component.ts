@@ -3,8 +3,11 @@ import { Component,
 import { FormBuilder, 
          FormGroup, 
          Validators           } from '@angular/forms';
-import { switchMap, tap } from 'rxjs';
-import { PaisesSmall          } from '../../interface/paises';
+import { switchMap, 
+         tap                  } from 'rxjs';
+
+import { Pais, 
+         PaisesSmall          } from '../../interface/paises';
 import { PaisesServiceService } from '../../service/paises-service.service';
 
 @Component({
@@ -15,12 +18,14 @@ import { PaisesServiceService } from '../../service/paises-service.service';
 export class SelectorComponent implements OnInit {
 
   miformulario: FormGroup = this.fb.group({
-    region:['', Validators.required],
-    pais  :['', Validators.required]
+    region  : ['', Validators.required],
+    pais    : ['', Validators.required],
+    frontera: ['', Validators.required]
   })
 // llenar los selectores
   regiones:string[] = []
   paises:PaisesSmall[]=[]
+  coodigoPais:Pais[]=[]
 
   constructor(  private fb: FormBuilder, 
                 private paisesService: PaisesServiceService ) { }
@@ -30,28 +35,35 @@ export class SelectorComponent implements OnInit {
 
     // Cuando cambie la reion 
     // Este codio es rempalzado con los operadores rxjs
-    /*this.miformulario.get('region')?.valueChanges
-        .subscribe(region => {
-          console.log(region);
-          this.paisesService.getPaisesPorRegion(region)
-              .subscribe(paises => {
-                console.log(paises);
-                this.paises = paises
-              })
-        }
-      )*/
+    // this.miformulario.get('region')?.valueChanges
+    //     .subscribe(region => {
+    //       console.log('esta',region);
+    //       this.paisesService.getPaisesPorRegion(region)
+    //           .subscribe(paises => {
+    //             console.log(paises);
+    //             this.paises = paises
+    //           })
+    //     }
+    //   )
+
     this.miformulario.get('region')?.valueChanges
         .pipe(
           //Con (_) es una nomenctura para indicar que no me interesa lo que viene por ese valor  
           tap( (_) => {
             this.miformulario.get('pais')?.reset('');
-          }),
+            }),
           switchMap(region => this.paisesService.getPaisesPorRegion(region) )
         )
         .subscribe(paises => {
           console.log(paises);
           this.paises = paises
         })
+
+    // Cuando selecciona el pais imrpimra en sonsola el codio de su pais
+    this.miformulario.get('pais')?.valueChanges
+    .subscribe(codigoPais =>{
+      console.log(codigoPais);
+    })
   }
 
   guardar(){
