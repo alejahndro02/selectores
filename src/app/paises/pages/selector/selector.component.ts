@@ -3,7 +3,7 @@ import { Component,
 import { FormBuilder, 
          FormGroup, 
          Validators           } from '@angular/forms';
-import { switchMap, 
+import { Observable, of, switchMap, 
          tap                  } from 'rxjs';
 
 import { Pais, 
@@ -25,7 +25,8 @@ export class SelectorComponent implements OnInit {
 // llenar los selectores
   regiones    : string       []  = []
   paises      : PaisesSmall  []  = []
-  fronteras   : string       []  = []
+  // fronteras   : string       []  = []//Se sustituye 
+  fronteras   : PaisesSmall  []  = []
 
   // UI
   cargando:boolean = false
@@ -74,21 +75,25 @@ export class SelectorComponent implements OnInit {
           this.cargando=true
           // this.miformulario.get('frontera')?.enable()//este es un ejemeplo de como desabilotdar campos 
         }),
-        switchMap(codigo => this.paisesService.getPaisPorCodigo(codigo))//esto regresa un pais 
+        // Se recibe el codigo pasando por el servico inyectando codigo y recibe los datos de un pais 
+        switchMap(codigo => this.paisesService.getPaisPorCodigo(codigo)),//esto regresa un pais 
+        switchMap(pais => this.paisesService.getPaisesPorCodigo(pais[0]?.borders))
       )
-      .subscribe(pais => {
+      .subscribe(paises => {
+        // console.log(paises[0]?.borders)
+        console.log(paises);
+        this.fronteras = paises
+        
         // Url V3
-        console.log('das',pais[0]?.borders);
-        this.fronteras= pais[0]?.borders || [];
+        // this.fronteras= pais[0]?.borders || [];
         this.cargando=false
-
-
         // Url V2
         /*console.log(pais?.borders);
         this.fronteras= pais?.borders || [];*/
       }
     )
   }
+
 
   guardar(){
     console.log('click', this.miformulario.value);
