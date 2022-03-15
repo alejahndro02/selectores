@@ -36,8 +36,8 @@
                     formControlName="frontera">
                 <option value="">--Selecciona el pais fronterizo--</option>
 
-                <!-- <option *ngFor="let frontera of fronteras"
-                        [value]="frontera.cca3">{{frontera.name.common | json}}</option> -->
+                <option *ngFor="let frontera of fronteras"
+                        [value]="frontera">{{frontera | json}}</option>
             </select>
         </div>
     </div>
