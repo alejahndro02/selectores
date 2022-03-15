@@ -40,7 +40,7 @@
                 <option value="">--Selecciona el pais fronterizo--</option>
 
                 <option *ngFor="let frontera of fronteras"
-                        [value]="frontera">{{frontera | json}}</option>
+                        [value]="frontera.cca3">{{frontera.name.common| json}}</option>
             </select>
         </div>
     </div>
