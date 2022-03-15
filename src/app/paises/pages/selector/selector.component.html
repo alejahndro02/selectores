@@ -5,7 +5,8 @@
       <!-- Seccion Region -->
     <div class="row">
         <div class="col">
-            <label class="form-label">Region:</label>
+            <label class="form-label">Region:</label>        
+
             <select class="form-control"
                     formControlName="region">
                 <option value="">--Seleccione Region--</option>
@@ -16,9 +17,10 @@
         </div>
     </div>
     <!-- Seccioin Pais-->
-    <div class="row">
+    <div class="row mt-4" *ngIf="paises.length!==0">
         <div class="col">
             <label class="form-label">Pais:</label>
+
             <select class="form-control"
                     formControlName="pais">
                 <option value="">--Selecciona el Pais--</option>
@@ -29,9 +31,10 @@
         </div>
     </div>
     <!-- Seccion Fronteras -->
-    <div class="row">
+    <div class="row mt-4" *ngIf="fronteras.length!==0">
         <div class="col">
             <label class="form-label">Fronteras:</label>
+
             <select class="form-control"
                     formControlName="frontera">
                 <option value="">--Selecciona el pais fronterizo--</option>
@@ -39,6 +42,13 @@
                 <option *ngFor="let frontera of fronteras"
                         [value]="frontera">{{frontera | json}}</option>
             </select>
+        </div>
+    </div>
+    <div class="row" *ngIf="cargando">
+        <div class="col">
+            <div class="alert alert-primary">
+                Cargando....
+            </div>
         </div>
     </div>
     <!-- Seccion Boton -->
