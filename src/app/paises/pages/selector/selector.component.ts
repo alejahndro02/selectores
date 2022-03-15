@@ -27,6 +27,9 @@ export class SelectorComponent implements OnInit {
   paises      : PaisesSmall  []  = []
   fronteras   : string       []  = []
 
+  // UI
+  cargando:boolean = false
+
   constructor(  private fb: FormBuilder, 
                 private paisesService: PaisesServiceService ) { }
 
@@ -51,11 +54,16 @@ export class SelectorComponent implements OnInit {
           //Con (_) es una nomenctura para indicar que no me interesa lo que viene por ese valor  es lo mismo que dejar unicamente ()
           tap( (_) => {
             this.miformulario.get('pais')?.reset('');
+            this.cargando=true
+
+            // this.miformulario.get('frontera')?.disable()//este es un ejemeplo de como desabilotdar campos 
             }),
           switchMap(region => this.paisesService.getPaisesPorRegion(region) )
         )
         .subscribe(paises => {
           this.paises = paises
+          this.cargando=false
+
         })
 
     // Cuando selecciona el pais imrpimra en sonsola el codio de su pais
@@ -63,6 +71,8 @@ export class SelectorComponent implements OnInit {
       .pipe(
         tap( (_)=> {
           this.miformulario.get('frontera')?.reset('')
+          this.cargando=true
+          // this.miformulario.get('frontera')?.enable()//este es un ejemeplo de como desabilotdar campos 
         }),
         switchMap(codigo => this.paisesService.getPaisPorCodigo(codigo))//esto regresa un pais 
       )
@@ -70,6 +80,8 @@ export class SelectorComponent implements OnInit {
         // Url V3
         console.log('das',pais[0]?.borders);
         this.fronteras= pais[0]?.borders || [];
+        this.cargando=false
+
 
         // Url V2
         /*console.log(pais?.borders);
